@@ -35,7 +35,7 @@ module.exports = function(config) {
   }
 
   function getUserBooks(userId, callback) {
-    var query = dataset.createQuery(['Book']).filter('userId =', userId);
+    var query = dataset.createQuery(['Book']).filter('userId', '=', userId);
     dataset.runQuery(query, callback);
   }
 
@@ -62,7 +62,7 @@ module.exports = function(config) {
   }
 
   function deleteBook(bookId, callback) {
-    var key = dataset.key(['Book', bookId]);
+    var key = dataset.key(['Book', parseInt(bookId, 10)]);
 
     dataset.get(key, function(err, book) {
       if (err) return callback(err);
@@ -87,7 +87,7 @@ module.exports = function(config) {
     var imageUrl = 'https://' + config.bucketName + '.storage.googleapis.com/' + filename;
     var stream = file.createWriteStream();
     stream.on('error', callback);
-    stream.on('complete', function() {
+    stream.on('finish', function() {
       // Set this file to be publicly readable
       file.makePublic(function(err) {
         if (err) return callback(err);
