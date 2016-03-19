@@ -47,7 +47,7 @@ module.exports = function(config) {
   }
 
   function deleteBook(bookId, callback) {
-    var key = dataset.key(['Book', bookId]);
+    var key = dataset.key(['Book', parseInt(bookId, 10)]);
     dataset.delete(key, callback);
   }
 
