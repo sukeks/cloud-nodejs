@@ -17,7 +17,7 @@ module.exports = function(config) {
 
   var gcloud = require('gcloud');
 
-  var dataset = gcloud.datastore.dataset({
+  var datastore = gcloud.datastore({
     projectId: config.projectId,
     keyFilename: config.keyFilename
   });
@@ -30,8 +30,8 @@ module.exports = function(config) {
   var bucket = storage.bucket(config.bucketName);
 
   function getAllBooks(callback) {
-    var query = dataset.createQuery(['Book']);
-    dataset.runQuery(query, callback);
+    var query = datastore.createQuery(['Book']);
+    datastore.runQuery(query, callback);
   }
 
   function getUserBooks(userId, callback) {
@@ -40,7 +40,7 @@ module.exports = function(config) {
 
   function addBook(title, author, coverImageData, userId, callback) {
     var entity = {
-      key: dataset.key('Book'),
+      key: datastore.key('Book'),
       data: {
         title: title,
         author: author
@@ -51,16 +51,16 @@ module.exports = function(config) {
       uploadCoverImage(coverImageData, function(err, imageUrl) {
         if (err) return callback(err);
         entity.data.imageUrl = imageUrl;
-        dataset.save(entity, callback);
+        datastore.save(entity, callback);
       });
     else
-      dataset.save(entity, callback);
+      datastore.save(entity, callback);
   }
 
   function deleteBook(bookId, callback) {
-    var key = dataset.key(['Book', parseInt(bookId, 10)]);
+    var key = datastore.key(['Book', parseInt(bookId, 10)]);
 
-    dataset.get(key, function(err, book) {
+    datastore.get(key, function(err, book) {
       if (err) return callback(err);
 
       if (book.data.imageUrl) {
@@ -68,10 +68,10 @@ module.exports = function(config) {
         var file = bucket.file(filename);
         file.delete(function(err) {
           if (err) return callback(err);
-          dataset.delete(key, callback);
+          datastore.delete(key, callback);
         });
       } else {
-        dataset.delete(key, callback);
+        datastore.delete(key, callback);
       }
     });
   }
