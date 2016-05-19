@@ -17,14 +17,14 @@ module.exports = function(config) {
 
   var gcloud = require('gcloud');
 
-  var dataset = gcloud.datastore.dataset({
+  var datastore = gcloud.datastore({
     projectId: config.projectId,
     keyFilename: config.keyFilename
   });
 
   function getAllBooks(callback) {
-    var query = dataset.createQuery(['Book']);
-    dataset.runQuery(query, callback);
+    var query = datastore.createQuery(['Book']);
+    datastore.runQuery(query, callback);
   }
 
   function getUserBooks(userId, callback) {

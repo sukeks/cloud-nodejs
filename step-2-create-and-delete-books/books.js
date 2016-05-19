@@ -17,14 +17,14 @@ module.exports = function(config) {
 
   var gcloud = require('gcloud');
 
-  var dataset = gcloud.datastore.dataset({
+  var datastore = gcloud.datastore({
     projectId: config.projectId,
     keyFilename: config.keyFilename
   });
 
   function getAllBooks(callback) {
-    var query = dataset.createQuery(['Book']);
-    dataset.runQuery(query, callback);
+    var query = datastore.createQuery(['Book']);
+    datastore.runQuery(query, callback);
   }
 
   function getUserBooks(userId, callback) {
@@ -36,19 +36,19 @@ module.exports = function(config) {
       return callback(new Error("books.addBook image saving Not Yet Implemented"));
 
     var entity = {
-      key: dataset.key('Book'),
+      key: datastore.key('Book'),
       data: {
         title: title,
         author: author
       }
     };
 
-    dataset.save(entity, callback);
+    datastore.save(entity, callback);
   }
 
   function deleteBook(bookId, callback) {
-    var key = dataset.key(['Book', parseInt(bookId, 10)]);
-    dataset.delete(key, callback);
+    var key = datastore.key(['Book', parseInt(bookId, 10)]);
+    datastore.delete(key, callback);
   }
 
   return {
