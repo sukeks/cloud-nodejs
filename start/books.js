@@ -15,16 +15,15 @@ var url = require('url');
 
 module.exports = function(config) {
 
-  var gcloud = require('gcloud');
-
-  var datastore = gcloud.datastore({
-    projectId: config.projectId,
-    keyFilename: config.keyFilename
-  });
-
   function getAllBooks(callback) {
-    var query = datastore.createQuery(['Book']);
-    datastore.runQuery(query, callback);
+    var error = null;
+    var books = [
+      {
+        key: { path: ['Book', 12345] },
+        data: { title: 'Fake Book', author: 'Fake Author' }
+      }
+    ];
+    callback(error, books);
   }
 
   function getUserBooks(userId, callback) {
@@ -33,22 +32,13 @@ module.exports = function(config) {
 
   function addBook(title, author, coverImageData, userId, callback) {
     if (coverImageData)
-      return callback(new Error("books.addBook image saving Not Yet Implemented"));
+      return callback(new Error('books.addBook with image [Not Yet Implemented]'));
 
-    var entity = {
-      key: datastore.key('Book'),
-      data: {
-        title: title,
-        author: author
-      }
-    };
-
-    datastore.save(entity, callback);
+    return callback(new Error('books.addBook [Not Yet Implemented]'));
   }
 
   function deleteBook(bookId, callback) {
-    var key = datastore.key(['Book', parseInt(bookId, 10)]);
-    datastore.delete(key, callback);
+    callback(new Error('books.deleteBook [Not Yet Implemented]'));
   }
 
   return {
