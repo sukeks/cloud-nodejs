@@ -15,7 +15,7 @@ var url = require('url');
 
 module.exports = function(config) {
 
-  var gcloud = require('gcloud');
+  var gcloud = require('google-cloud');
 
   var datastore = gcloud.datastore({
     projectId: config.projectId,
