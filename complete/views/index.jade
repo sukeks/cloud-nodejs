@@ -25,15 +25,15 @@ html(lang="en")
       if books.length
         - each book in books
           .book
-            if book.data.imageUrl
+            if book.imageUrl
               .cover
-                img(src=book.data.imageUrl title="#{book.data.title} by #{book.data.author}")
+                img(src=book.imageUrl title="#{book.title} by #{book.author}")
             else
               .info
-                .title= book.data.title
+                .title= book.title
                 .by - by -
-                .author= book.data.author
-            a.delete(href="/books/delete?id=#{book.key.path[1]}") delete
+                .author= book.author
+            a.delete(href="/books/delete?id=#{book.id}") delete
       else
         .nobooks There are no books!
 
