@@ -35,18 +35,20 @@ app.use(session({ signed: true, secret: config.cookieSecret }));
 
 /* Fetch all books and display them */
 app.get('/', function(req, res, next) {
-  books.getAllBooks(function(err, books) {
+  books.getAllBooks(function(err, books, key) {
     if (err) return next(err);
-    res.render('index', { books: books, user: req.session.user });
+    var keyBooks = books.map((book) => Object.assign(book, { id: book.id || book[key].path[1] }));
+    res.render('index', { books: keyBooks, user: req.session.user });
   });
 });
 
 /* Fetch books created by the currently logged in user and display them */
 app.get('/mine', function(req, res, next) {
   if (! req.session.user) return res.redirect('/');
-  books.getUserBooks(req.session.user.id, function(err, books) {
+  books.getUserBooks(req.session.user.id, function(err, books, key) {
     if (err) return next(err);
-    res.render('index', { books: books, user: req.session.user });
+    var keyBooks = books.map((book) => Object.assign(book, { id: book.id || book[key].path[1] }));
+    res.render('index', { books: keyBooks, user: req.session.user });
   });
 });
 

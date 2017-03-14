@@ -31,7 +31,7 @@ module.exports = function(config) {
 
   function getAllBooks(callback) {
     var query = datastore.createQuery(['Book']);
-    datastore.runQuery(query, callback);
+    datastore.runQuery(query, (err, books) => callback(err, books, datastore.KEY));
   }
 
   function getUserBooks(userId, callback) {
