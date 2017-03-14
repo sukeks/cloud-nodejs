@@ -63,8 +63,8 @@ module.exports = function(config) {
     datastore.get(key, function(err, book) {
       if (err) return callback(err);
 
-      if (book.data.imageUrl) {
-        var filename = url.parse(book.data.imageUrl).path.replace('/', '')
+      if (book.imageUrl) {
+        var filename = url.parse(book.imageUrl).path.replace('/', '')
         var file = bucket.file(filename);
         file.delete(function(err) {
           if (err) return callback(err);
