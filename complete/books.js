@@ -31,12 +31,12 @@ module.exports = function(config) {
 
   function getAllBooks(callback) {
     var query = datastore.createQuery(['Book']);
-    datastore.runQuery(query, callback);
+    datastore.runQuery(query, (err, books) => callback(err, books, datastore.KEY));
   }
 
   function getUserBooks(userId, callback) {
     var query = datastore.createQuery(['Book']).filter('userId', '=', userId);
-    datastore.runQuery(query, callback);
+    datastore.runQuery(query, (err, books) => callback(err, books, datastore.KEY));
   }
 
   function addBook(title, author, coverImageData, userId, callback) {
@@ -44,7 +44,7 @@ module.exports = function(config) {
       key: datastore.key('Book'),
       data: {
         title: title,
-        author: author,
+        author: author
       }
     };
 
@@ -67,8 +67,8 @@ module.exports = function(config) {
     datastore.get(key, function(err, book) {
       if (err) return callback(err);
 
-      if (book.data.imageUrl) {
-        var filename = url.parse(book.data.imageUrl).path.replace('/', '')
+      if (book.imageUrl) {
+        var filename = url.parse(book.imageUrl).path.replace('/', '')
         var file = bucket.file(filename);
         file.delete(function(err) {
           if (err) return callback(err);

@@ -18,10 +18,7 @@ module.exports = function(config) {
   function getAllBooks(callback) {
     var error = null;
     var books = [
-      {
-        key: { path: ['Book', 12345] },
-        data: { title: 'Fake Book', author: 'Fake Author' }
-      }
+      { id: 12345, title: 'Fake Book', author: 'Fake Author' }
     ];
     callback(error, books);
   }
