@@ -37,7 +37,7 @@ app.use(session({ signed: true, secret: config.cookieSecret }));
 app.get('/', function(req, res, next) {
   books.getAllBooks(function(err, books, key) {
     if (err) return next(err);
-    var keyBooks = books.map((book) => Object.assign(book, { id: book.id || book[key].path[1] }));
+    var keyBooks = books.map((book) => Object.assign(book, { id: book.id || book[key].id }));
     res.render('index', { books: keyBooks, user: req.session.user });
   });
 });
@@ -47,7 +47,7 @@ app.get('/mine', function(req, res, next) {
   if (! req.session.user) return res.redirect('/');
   books.getUserBooks(req.session.user.id, function(err, books, key) {
     if (err) return next(err);
-    var keyBooks = books.map((book) => Object.assign(book, { id: book.id || book[key].path[1] }));
+    var keyBooks = books.map((book) => Object.assign(book, { id: book.id || book[key].id }));
     res.render('index', { books: keyBooks, user: req.session.user });
   });
 });
